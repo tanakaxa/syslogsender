@@ -1,0 +1,2 @@
+# syslogsender
+syslogをリモートサーバに送りつけるためのpythonスクリプト
