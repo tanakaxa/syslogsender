@@ -1,6 +1,6 @@
 from scapy.all import*
 from random import randrange
-import syslogjson
+from syslogjson import syslogjson
 import json
 import datetime
 
