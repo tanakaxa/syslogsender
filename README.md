@@ -22,9 +22,8 @@ $ python3 syslogsender.py sample.json
 ### サンプル実行例
 ```
 $ python3 syslogsender.py sample.json
-Send To 10.0.0.1(TCP) MSG:<137>1 2003-10-11T22:14:15.003000+09:00 mymachine.example.com evntslog 123 ID47 [exampleSDID@32473 iut="3" eventSource="Application" eventID="1011"] LOCAL1 EMERGENCY MESSAGE
-Send To 10.0.0.2 MSG:<170>1 2021-01-16T22:27:22.003496+09:00 - - - - CRITICAL MESSAGE
-Send To 10.0.0.2 MSG:<134>1 2021-01-16T22:27:22.003652+09:00 - - - - INFO MESSAGE
+Send To 10.0.0.1:514 MSG:<137>Jan 24 11:50:38 testhost This message is rfc3164 format Alert Message
+Send To 10.0.0.2:514 MSG:<134>Jan 24 12:06:45 - This message is Info Message
 ```
 
 ### サンプル受信サーバ出力例
