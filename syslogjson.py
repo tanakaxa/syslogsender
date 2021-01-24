@@ -3,8 +3,46 @@ import json
 import datetime
 
 class SyslogData:
+    # Create Syslog Message (RFC3164)
+    def msgcreate3164(self, jsondata : json):
+        try:
+            facility = jsondata["facility"]
+        except KeyError:
+            # facility 16 : local0
+            facility = 16
+
+        try:
+            severity = jsondata["severity"]
+        except KeyError:
+            # Severity 6 : Info
+            severity = 6
+
+        prival = facility * 8 + severity
+
+        try:
+            timestamp = jsondata["timestamp"]
+        except KeyError:
+            # Now JST Time
+            nowtime = datetime.datetime.now()
+            timestamp = nowtime.strftime("%b %d %H:%M:%S")
+        
+        try:
+            hostname = jsondata["hostname"]
+        except KeyError:
+            hostname = "-"
+
+        msg = jsondata["msg"]
+
+        self.syslogmsg = "<%i>%s %s %s" % (
+            prival,
+            timestamp,
+            hostname,
+            msg
+        )
+
+
     # Create Syslog Message (RFC5424)
-    def msgcreate(self, jsondata : json):
+    def msgcreate5424(self, jsondata : json):
         SYSLOG_VERSION = 1
 
         try:
@@ -25,9 +63,9 @@ class SyslogData:
             timestamp = jsondata["timestamp"]
         except KeyError:
             # Now JST Time
-            utctime = datetime.datetime.now()
+            nowtime = datetime.datetime.now()
             # RFC3339 TimeStamp
-            timestamp = utctime.isoformat() + "+09:00"
+            timestamp = nowtime.isoformat() + "+09:00"
 
         try:
             hostname = jsondata["hostname"]
@@ -63,7 +101,15 @@ class SyslogData:
         )
 
     def __init__(self, jsondata : json):
-        self.msgcreate(jsondata)
+        try:
+            rfc5424flag = jsondata["rfc5424"]
+        except KeyError:
+            rfc5424flag = False
+
+        if rfc5424flag:
+            self.msgcreate5424(jsondata)
+        else:
+            self.msgcreate3164(jsondata)
 
         self.server_ip = jsondata["logserver_ip"]
         
